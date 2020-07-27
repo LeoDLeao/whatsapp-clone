@@ -60,40 +60,37 @@ public class CadastroActivity extends AppCompatActivity {
         FirebaseAuth auth = ConfiguracaoFirebase.getFirebaseAuth();
 
         auth.createUserWithEmailAndPassword(usuario.getEmail(),usuario.getSenha())
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(CadastroActivity.this,
-                            "Cadastro efetuado com sucesso! ",
-                            Toast.LENGTH_SHORT).show();
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        Toast.makeText(CadastroActivity.this,
+                                "Cadastro efetuado com sucesso! ",
+                                Toast.LENGTH_SHORT).show();
 
-                    //logar();
+                        finish();
 
-                }
-                else{
-                    String exception = "";
-
-                    try {
-                        throw task.getException();
-                    }catch (FirebaseAuthWeakPasswordException e){
-                        exception = "Digite uma senha mais forte";
-                    }catch (FirebaseAuthInvalidCredentialsException e){
-                        exception = "Por favor, digite um email válido";
-                    }catch (FirebaseAuthUserCollisionException e){
-                        exception = "Este email já foi cadastrado !";
-                    }catch (Exception e){
-                        exception = "Erro ao cadastrar usuário" + e.getMessage();
-                        e.printStackTrace();
                     }
-                    Toast.makeText(CadastroActivity.this,
-                            exception,
-                            Toast.LENGTH_SHORT).show();
+                    else{
+                        String exception;
 
-                }
+                        try {
+                            throw task.getException();
+                        }catch (FirebaseAuthWeakPasswordException e){
+                            exception = "Digite uma senha mais forte";
+                        }catch (FirebaseAuthInvalidCredentialsException e){
+                            exception = "Por favor, digite um email válido";
+                        }catch (FirebaseAuthUserCollisionException e){
+                            exception = "Este email já foi cadastrado !";
+                        }catch (Exception e){
+                            exception = "Erro ao cadastrar usuário" + e.getMessage();
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(CadastroActivity.this,
+                                exception,
+                                Toast.LENGTH_SHORT).show();
 
-            }
-        });
+                    }
+
+                });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

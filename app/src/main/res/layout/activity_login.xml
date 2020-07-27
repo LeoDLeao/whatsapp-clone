@@ -27,6 +27,7 @@
         android:background="@color/colorPrimaryDark"
         android:text="@string/button_login"
         android:textColor="#FFFFFF"
+        android:onClick="logarUsuario"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
