@@ -1,14 +1,15 @@
 package com.example.zap.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager.widget.ViewPager;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.zap.R;
 import com.example.zap.firebase.ConfiguracaoFirebase;
@@ -19,8 +20,6 @@ import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
-import java.util.zip.Inflater;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -28,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Whatsapp");
+        Toolbar toolbar = findViewById(R.id.toolbarConfig);
+        toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
 
         //Config abas
@@ -67,8 +66,20 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 break;
 
+            case R.id.menuConfiguracoes:
+
+                abrirTelaConfiguracoes();
+
+                break;
+
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void abrirTelaConfiguracoes() {
+        Intent intent = new Intent(MainActivity.this, ConfiguracoesActivity.class);
+        startActivity(intent);
+
     }
 
     private void deslogarUsuario() {
