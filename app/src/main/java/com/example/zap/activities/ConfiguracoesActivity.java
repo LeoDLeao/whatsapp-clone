@@ -14,7 +14,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuracoes);
 
-        Toolbar toolbar = findViewById(R.id.toolbarConfig);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.titulo_configuracoes);
         setSupportActionBar(toolbar);
 

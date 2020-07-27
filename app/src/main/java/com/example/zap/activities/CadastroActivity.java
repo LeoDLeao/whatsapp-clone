@@ -1,21 +1,18 @@
 package com.example.zap.activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.zap.R;
 import com.example.zap.firebase.ConfiguracaoFirebase;
+import com.example.zap.helper.Base64Custom;
 import com.example.zap.model.Usuario;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -66,6 +63,14 @@ public class CadastroActivity extends AppCompatActivity {
                                 "Cadastro efetuado com sucesso! ",
                                 Toast.LENGTH_SHORT).show();
 
+                        try {
+                            String idUsuario = Base64Custom.codificarBase64(usuario.getEmail());
+                            usuario.setId(idUsuario);
+
+                            usuario.salvar();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                         finish();
 
                     }
