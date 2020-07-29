@@ -12,4 +12,8 @@
     <string name="titulo_configuracoes">Configurações</string>
     <string name="nome_usuario">Nome do usuário</string>
     <string name="aviso_nome_usuario">Esse não é seu nome de usuário nem sua senha. Esse nome ficará visível para seus contatos do WhatsApp</string>
+
+    <string name="titulo_alerta_permissao">Permissões Negadas</string>
+    <string name="mensagem_alerta_permissao">Para utilizar o app é necessário aceitar as permissões</string>
+    <string name="bt_alerta_permissao">Confirmar</string>
 </resources>
