@@ -1,16 +1,12 @@
 package com.example.zap.activities;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.ImageDecoder;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,12 +16,14 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.zap.R;
 import com.example.zap.helper.Permissoes;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ConfiguracoesActivity extends AppCompatActivity {
 
-    private ImageButton imageButtonCamera, imageButtonGaleria;
+    private CircleImageView imageButtonCamera;
     private CircleImageView circleImageViewPerfil;
 
     private static final int SELECAO_CAMERA = 100;
@@ -43,8 +41,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
         Permissoes.validarPermissoes(permissoesNecessarias,this,1);
 
-        imageButtonCamera = findViewById(R.id.imageButtonCamera);
-        imageButtonGaleria = findViewById(R.id.imageButtonGaleria);
+        imageButtonCamera = findViewById(R.id.imageCamera);
         circleImageViewPerfil = findViewById(R.id.imageFoto);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -53,59 +50,39 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+
         imageButtonCamera.setOnClickListener(v -> {
 
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-            if(intent.resolveActivity(getPackageManager()) != null) {
-                startActivityForResult(intent, SELECAO_CAMERA);
-            }
+            CropImage.activity()
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setAspectRatio(1,1)
+                    .setCropShape(CropImageView.CropShape.OVAL)
+                    .start(this);
         });
 
-        imageButtonGaleria.setOnClickListener(v -> {
-
-            Intent intent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-            if(intent.resolveActivity(getPackageManager()) != null) {
-                startActivityForResult(intent, SELECAO_GALERIA);
-            }
-        });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK){
-            Bitmap imagem = null;
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
 
-            try {
-                switch (requestCode){
-                    case SELECAO_CAMERA:
-                        imagem = (Bitmap) data.getExtras().get("data");
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
+            if (resultCode == RESULT_OK) {
 
-                        break;
+                Uri resultUri = result.getUri();
 
-                    case SELECAO_GALERIA:
-                        Uri localImagemSelecionada = data.getData();
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                            imagem = ImageDecoder.decodeBitmap(ImageDecoder.createSource(getContentResolver(),localImagemSelecionada));
-                        }else{
-                            MediaStore.Images.Media.getBitmap(getContentResolver(),localImagemSelecionada);
-                        }
+                circleImageViewPerfil.setImageURI(resultUri);
 
-                        break;
-                }
+            }
+            else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
 
-                if( imagem != null){
+                Exception error = result.getError();
 
-                    circleImageViewPerfil.setImageBitmap(imagem);
-
-
-                }
-            }catch (Exception e){
-                e.printStackTrace();
+                Toast.makeText(this, "" + error, Toast.LENGTH_SHORT).show();
             }
         }
     }
