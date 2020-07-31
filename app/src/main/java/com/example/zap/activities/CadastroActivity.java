@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.zap.R;
 import com.example.zap.firebase.ConfiguracaoFirebase;
+import com.example.zap.firebase.UsuarioFirebase;
 import com.example.zap.helper.Base64Custom;
 import com.example.zap.model.Usuario;
 import com.google.android.material.textfield.TextInputEditText;
@@ -72,6 +73,8 @@ public class CadastroActivity extends AppCompatActivity {
                         }catch (Exception e){
                             e.printStackTrace();
                         }
+
+                        UsuarioFirebase.atualizaNomeUsuario(usuario.getNome());
                         finish();
 
                     }

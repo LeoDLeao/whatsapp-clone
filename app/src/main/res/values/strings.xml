@@ -16,4 +16,7 @@
     <string name="titulo_alerta_permissao">Permissões Negadas</string>
     <string name="mensagem_alerta_permissao">Para utilizar o app é necessário aceitar as permissões</string>
     <string name="bt_alerta_permissao">Confirmar</string>
+
+    <string name="erro_upload_imagem">Erro ao fazer upload da imagem</string>
+    <string name="sucesso_upload_imagem">Sucesso ao fazer upload da imagem</string>
 </resources>
