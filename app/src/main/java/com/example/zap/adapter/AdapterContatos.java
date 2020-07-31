@@ -52,7 +52,8 @@ public class AdapterContatos extends RecyclerView.Adapter<AdapterContatos.ViewHo
             Glide.with(context)
                     .load(uri)
                     .into(holder.fotoContato);
-        }else {
+        }
+        else {
             holder.fotoContato.setImageResource(R.drawable.padrao);
         }
 
@@ -73,7 +74,7 @@ public class AdapterContatos extends RecyclerView.Adapter<AdapterContatos.ViewHo
         public ViewHolderContatos(@NonNull View itemView) {
             super(itemView);
 
-            fotoContato = itemView.findViewById(R.id.imageFoto);
+            fotoContato = itemView.findViewById(R.id.fotoContato);
             textNomeContato = itemView.findViewById(R.id.textNomeContato);
             textEmailContato = itemView.findViewById(R.id.textEmailContato);
 

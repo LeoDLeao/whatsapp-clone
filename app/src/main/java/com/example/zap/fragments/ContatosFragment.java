@@ -1,22 +1,26 @@
 package com.example.zap.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.example.zap.activities.ConfiguracoesActivity;
-import com.example.zap.adapter.AdapterContatos;
 import com.example.zap.R;
+import com.example.zap.activities.ChatActivity;
+import com.example.zap.adapter.AdapterContatos;
 import com.example.zap.firebase.ConfiguracaoFirebase;
+import com.example.zap.firebase.UsuarioFirebase;
+import com.example.zap.helper.RecyclerItemClickListener;
 import com.example.zap.model.Usuario;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,6 +39,8 @@ public class ContatosFragment extends Fragment {
 
     private DatabaseReference usuariosRef;
 
+    private FirebaseUser usuarioAtual = UsuarioFirebase.getUsuarioAtual();
+
     private ValueEventListener valueEventListenerContatos;
 
 
@@ -51,7 +57,7 @@ public class ContatosFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_contatos, container, false);
 
         recyclerView = view.findViewById(R.id.recyclerViewListaContatos);
-        usuariosRef = ConfiguracaoFirebase.getFirebaseDatabase();
+        usuariosRef = ConfiguracaoFirebase.getFirebaseDatabase().child("usuarios");
 
 
         adapterContatos = new AdapterContatos(listaContatos, getActivity());
@@ -61,6 +67,28 @@ public class ContatosFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapterContatos);
+
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity(),
+                        recyclerView
+                        , new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(getActivity(), ChatActivity.class);
+                        startActivity(intent);
+
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    }
+                }));
 
 
         return view;
@@ -77,18 +105,23 @@ public class ContatosFragment extends Fragment {
     public void onStop() {
         super.onStop();
         usuariosRef.removeEventListener(valueEventListenerContatos);
+        listaContatos.clear();
     }
 
-    public void recuperarContatos(){
+    private void recuperarContatos(){
 
        valueEventListenerContatos = usuariosRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for (DataSnapshot dados: dataSnapshot.getChildren()
-                     ) {
+                for (DataSnapshot dados: dataSnapshot.getChildren()) {
                     Usuario usuario = dados.getValue(Usuario.class);
-                    listaContatos.add(usuario);
+
+                    if(!usuarioAtual.getEmail().equals(usuario.getEmail())){
+                        listaContatos.add(usuario);
+                    }
+
+
 
                 }
 

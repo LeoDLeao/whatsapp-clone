@@ -19,4 +19,5 @@
 
     <string name="erro_upload_imagem">Erro ao fazer upload da imagem</string>
     <string name="sucesso_upload_imagem">Sucesso ao fazer upload da imagem</string>
+    <string name="title_activity_chat">ChatActivity</string>
 </resources>
