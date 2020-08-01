@@ -75,7 +75,10 @@ public class ContatosFragment extends Fragment {
                     @Override
                     public void onItemClick(View view, int position) {
                         Intent intent = new Intent(getActivity(), ChatActivity.class);
+                        intent.putExtra("contato", listaContatos.get(position));
+
                         startActivity(intent);
+
 
                     }
 

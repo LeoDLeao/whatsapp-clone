@@ -1,5 +1,6 @@
 package com.example.zap.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
 
         SmartTabLayout viewPagerTab = findViewById(R.id.viewPagerTab);
-        viewPagerTab.setViewPager(viewPager );
+        viewPagerTab.setViewPager(viewPager);
 
 
     }
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main,menu);
+        inflater.inflate(R.menu.menu_main, menu);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
 
             case R.id.menuSair:
 
@@ -87,9 +88,9 @@ public class MainActivity extends AppCompatActivity {
     private void deslogarUsuario() {
 
         FirebaseAuth auth = ConfiguracaoFirebase.getFirebaseAuth();
-        try{
+        try {
             auth.signOut();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
