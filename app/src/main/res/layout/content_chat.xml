@@ -56,6 +56,7 @@
                 android:id="@+id/imageCameraChat"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:onClick="abrirCameraChat"
                 android:src="@drawable/ic_photo_camera_cinza_24dp"
                 />
 

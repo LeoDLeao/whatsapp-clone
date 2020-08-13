@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingRight="16dp"
+    android:paddingLeft="16dp"
+    android:paddingBottom="6dp"
+    android:paddingTop="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/fotoConversa"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/padrao">
+
+        </de.hdodenhof.circleimageview.CircleImageView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="5dp"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/textNomeConversa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nome da Conversa"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textMensagemConversa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sua ultima mensagem" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <include layout="@layout/divisor_lista"></include>
+</LinearLayout>

@@ -69,11 +69,11 @@ public class AdapterChat  extends RecyclerView.Adapter<AdapterChat.ViewHolderCha
             holder.textMensagem.setVisibility(View.GONE);
 
 
+        }else {
+            holder.textMensagem.setText(msg);
+            holder.imagemMensagem.setVisibility(View.GONE);
+
         }
-        holder.textMensagem.setText(msg);
-        holder.imagemMensagem.setVisibility(View.GONE);
-
-
 
     }
 

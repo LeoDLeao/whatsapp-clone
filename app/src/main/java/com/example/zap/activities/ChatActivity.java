@@ -1,5 +1,7 @@
 package com.example.zap.activities;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -8,9 +10,12 @@ import com.example.zap.adapter.AdapterChat;
 import com.example.zap.firebase.ConfiguracaoFirebase;
 import com.example.zap.firebase.UsuarioFirebase;
 import com.example.zap.helper.Base64Custom;
+import com.example.zap.model.Conversa;
 import com.example.zap.model.Mensagem;
 import com.example.zap.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -22,6 +27,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -33,9 +40,14 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -61,6 +73,9 @@ public class ChatActivity extends AppCompatActivity {
     private String idRemetente = ConfiguracaoFirebase.getIdUsuario();
 
     private ChildEventListener childEventListenerMensagens;
+
+    private static final int SELECAO_CAMERA = 100;
+    private StorageReference storageReference = ConfiguracaoFirebase.getStorageReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +127,16 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+    public void abrirCameraChat(View view){
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if(intent.resolveActivity(getPackageManager()) != null){
+            startActivityForResult(intent,SELECAO_CAMERA);
+        }
+
+    }
+
     public void enviarMensagem(View view){
         String textoMensagem = editTextChat.getText().toString();
 
@@ -124,6 +149,8 @@ public class ChatActivity extends AppCompatActivity {
 
             salvarMensagem(idRemetente,idDestinatario,mensagem);
             salvarMensagem(idDestinatario,idRemetente,mensagem);
+
+            salvarConversa(mensagem);
         }
         else{
             Toast.makeText(ChatActivity.this,
@@ -131,6 +158,19 @@ public class ChatActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT)
                     .show();
         }
+    }
+
+    private void salvarConversa(Mensagem mensagem) {
+
+        Conversa conversaRemetente = new Conversa();
+        conversaRemetente.setIdUsuarioRemetente(idRemetente);
+        conversaRemetente.setIdUsuarioDestinatario(idDestinatario);
+        conversaRemetente.setUltimaMensagem(mensagem.getTextoMensagem());
+        conversaRemetente.setUsuarioExibicao(usuarioDestinatario);
+
+        conversaRemetente.salvar();
+
+
     }
 
     private void salvarMensagem(String idRemetente, String idDestinatario, Mensagem mensagem) {
@@ -161,6 +201,80 @@ public class ChatActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         listaMensagemsRef.removeEventListener(childEventListenerMensagens);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == RESULT_OK){
+
+            Bitmap imagem = null;
+
+            try{
+
+                switch (requestCode){
+                    case SELECAO_CAMERA:
+                        imagem = (Bitmap) data.getExtras().get("data");
+
+                        break;
+                }
+
+                if(imagem != null){
+
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    imagem.compress(Bitmap.CompressFormat.JPEG,70,baos);
+                    byte[] dadosImagem = baos.toByteArray();
+
+                    String nomeImagem = UUID.randomUUID().toString();
+
+
+
+                    final StorageReference imagemRef = storageReference
+                            .child("imagens")
+                            .child("fotos")
+                            .child(idRemetente)
+                            .child(nomeImagem + ".jpeg");
+
+                    UploadTask uploadTask = imagemRef.putBytes(dadosImagem);
+                    uploadTask.addOnFailureListener(e -> {
+
+                        Log.i("Upload error", "erro : " + e.getMessage());
+                        e.printStackTrace();
+
+                        Toast.makeText(ChatActivity.this,
+                                R.string.erro_upload_imagem,
+                                Toast.LENGTH_SHORT).show();
+
+                    }).addOnSuccessListener(taskSnapshot -> {
+
+                        imagemRef.getDownloadUrl().addOnCompleteListener(task -> {
+
+                            String url = task.getResult().toString();
+
+                            Mensagem mensagem = new Mensagem();
+                            mensagem.setIdUsuario(idRemetente);
+                            mensagem.setTextoMensagem("imagem.jpeg");
+                            mensagem.setImagem(url);
+
+                            salvarMensagem(idRemetente,idDestinatario,mensagem);
+                            salvarMensagem(idDestinatario,idRemetente,mensagem);
+
+                        });
+
+                    });
+
+
+                }
+
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+
+
+        }
     }
 
     private void recuperarMensagens(){
