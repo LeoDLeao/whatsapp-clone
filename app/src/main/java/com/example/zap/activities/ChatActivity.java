@@ -201,6 +201,7 @@ public class ChatActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         listaMensagemsRef.removeEventListener(childEventListenerMensagens);
+        mensagens.clear();
     }
 
     @Override

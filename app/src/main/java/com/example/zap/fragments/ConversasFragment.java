@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,6 +107,7 @@ public class ConversasFragment extends Fragment {
     public void onStop() {
         super.onStop();
         conversasRef.removeEventListener(childEventListenerConversas);
+        listaConversas.clear();
 
     }
 
@@ -148,5 +150,37 @@ public class ConversasFragment extends Fragment {
        });
 
 
+
+    }
+
+    public void recarregarConversas(){
+
+        adapterConversas = new AdapterConversas(listaConversas, getActivity());
+        recyclerViewConversas.setAdapter(adapterConversas);
+        adapterConversas.notifyDataSetChanged();
+
+    }
+
+
+    public void pesquisarConversas(String texto){
+       // Log.d("pesquisa", texto);
+
+        List<Conversa> listaBusca = new ArrayList<>();
+
+        for (Conversa conversa : listaConversas){
+
+            String nome = conversa.getUsuarioExibicao().getNome();
+            String msg = conversa.getUltimaMensagem();
+
+            if(nome.contains(texto) || msg.contains(texto)){
+                listaBusca.add(conversa);
+
+            }
+
+            adapterConversas = new AdapterConversas(listaBusca, getActivity());
+            recyclerViewConversas.setAdapter(adapterConversas);
+            adapterConversas.notifyDataSetChanged();
+
+        }
     }
 }
