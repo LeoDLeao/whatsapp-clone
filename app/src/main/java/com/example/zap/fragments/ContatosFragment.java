@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.zap.R;
 import com.example.zap.activities.ChatActivity;
+import com.example.zap.activities.GrupoActivity;
 import com.example.zap.adapter.AdapterContatos;
 import com.example.zap.firebase.ConfiguracaoFirebase;
 import com.example.zap.firebase.UsuarioFirebase;
@@ -74,12 +75,22 @@ public class ContatosFragment extends Fragment {
                         , new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Intent intent = new Intent(getActivity(), ChatActivity.class);
-                        intent.putExtra("contato", listaContatos.get(position));
 
-                        startActivity(intent);
+                        Usuario usuarioSelecionado = listaContatos.get(position);
 
+                        boolean cabecalho = usuarioSelecionado.getEmail().isEmpty();
 
+                        if(cabecalho ){
+
+                            Intent intentGrupo = new Intent(getActivity(), GrupoActivity.class);
+                            startActivity(intentGrupo);
+
+                        }else {
+                            Intent intent = new Intent(getActivity(), ChatActivity.class);
+                            intent.putExtra("contato", usuarioSelecionado);
+
+                            startActivity(intent);
+                        }
                     }
 
                     @Override
@@ -92,6 +103,13 @@ public class ContatosFragment extends Fragment {
 
                     }
                 }));
+
+
+        Usuario itemGrupo = new Usuario();
+        itemGrupo.setNome("Novo Grupo");
+        itemGrupo.setEmail("");
+
+        listaContatos.add(itemGrupo);
 
 
         return view;
@@ -109,6 +127,12 @@ public class ContatosFragment extends Fragment {
         super.onStop();
         usuariosRef.removeEventListener(valueEventListenerContatos);
         listaContatos.clear();
+
+        Usuario itemGrupo = new Usuario();
+        itemGrupo.setNome("Novo Grupo");
+        itemGrupo.setEmail("");
+
+        listaContatos.add(itemGrupo);
     }
 
     private void recuperarContatos(){

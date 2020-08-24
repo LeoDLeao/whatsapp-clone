@@ -11,6 +11,7 @@ import com.example.zap.firebase.ConfiguracaoFirebase;
 import com.example.zap.firebase.UsuarioFirebase;
 import com.example.zap.helper.Base64Custom;
 import com.example.zap.model.Conversa;
+import com.example.zap.model.Grupo;
 import com.example.zap.model.Mensagem;
 import com.example.zap.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -64,6 +65,7 @@ public class ChatActivity extends AppCompatActivity {
     private AdapterChat adapterChat;
 
     private Usuario usuarioDestinatario;
+    private Grupo grupo;
 
     private List<Mensagem> mensagens = new ArrayList<>();
 
@@ -104,21 +106,44 @@ public class ChatActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
+            if(bundle.containsKey("grupo")){
 
-            usuarioDestinatario = (Usuario) bundle.getSerializable("contato");
+                grupo = (Grupo) bundle.getSerializable("grupo");
+                idDestinatario = grupo.getIdGrupo();
+                textNomeContato.setText(grupo.getNome());
 
-            textNomeContato.setText(usuarioDestinatario.getNome());
-            idDestinatario = Base64Custom.codificarBase64(usuarioDestinatario.getEmail());
+                if(grupo.getFoto() != null){
+                    Uri uriFotoGrupo = Uri.parse(grupo.getFoto());
 
-            if(usuarioDestinatario.getFoto() != null){
-                Uri uriFotoContato = Uri.parse(usuarioDestinatario.getFoto());
+                    Glide.with(ChatActivity.this)
+                            .load(uriFotoGrupo)
+                            .into(FotoContato);
+                }
+                else{
+                    FotoContato.setImageResource(R.drawable.padrao);
+                }
 
-                Glide.with(ChatActivity.this)
-                        .load(uriFotoContato)
-                        .into(FotoContato);
-            }else {
-                FotoContato.setImageResource(R.drawable.padrao);
             }
+            else{
+
+                usuarioDestinatario = (Usuario) bundle.getSerializable("contato");
+
+                textNomeContato.setText(usuarioDestinatario.getNome());
+                idDestinatario = Base64Custom.codificarBase64(usuarioDestinatario.getEmail());
+
+                if(usuarioDestinatario.getFoto() != null){
+                    Uri uriFotoContato = Uri.parse(usuarioDestinatario.getFoto());
+
+                    Glide.with(ChatActivity.this)
+                            .load(uriFotoContato)
+                            .into(FotoContato);
+                }else {
+                    FotoContato.setImageResource(R.drawable.padrao);
+                }
+
+            }
+
+
 
 
         }
@@ -247,23 +272,19 @@ public class ChatActivity extends AppCompatActivity {
                                 R.string.erro_upload_imagem,
                                 Toast.LENGTH_SHORT).show();
 
-                    }).addOnSuccessListener(taskSnapshot -> {
+                    }).addOnSuccessListener(taskSnapshot -> imagemRef.getDownloadUrl().addOnCompleteListener(task -> {
 
-                        imagemRef.getDownloadUrl().addOnCompleteListener(task -> {
+                        String url = task.getResult().toString();
 
-                            String url = task.getResult().toString();
+                        Mensagem mensagem = new Mensagem();
+                        mensagem.setIdUsuario(idRemetente);
+                        mensagem.setTextoMensagem("imagem.jpeg");
+                        mensagem.setImagem(url);
 
-                            Mensagem mensagem = new Mensagem();
-                            mensagem.setIdUsuario(idRemetente);
-                            mensagem.setTextoMensagem("imagem.jpeg");
-                            mensagem.setImagem(url);
+                        salvarMensagem(idRemetente,idDestinatario,mensagem);
+                        salvarMensagem(idDestinatario,idRemetente,mensagem);
 
-                            salvarMensagem(idRemetente,idDestinatario,mensagem);
-                            salvarMensagem(idDestinatario,idRemetente,mensagem);
-
-                        });
-
-                    });
+                    }));
 
 
                 }

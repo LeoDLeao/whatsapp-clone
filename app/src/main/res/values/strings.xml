@@ -22,4 +22,11 @@
     <string name="title_activity_chat">ChatActivity</string>
 
     <string name="alerta_chat">Por favor, digite uma mensagem</string>
+
+    <string name="title_activity_grupo">GrupoActivity</string>
+    <string name="novo_grupo">Novo grupo</string>
+
+    <string name="title_activity_cadastro_grupo">CadastroGrupoActivity</string>
+    <string name="subtitulo_novo_grupo">Defina o nome do grupo</string>
+    <string name="hint_nome_grupo">Digite o nome do grupo</string>
 </resources>

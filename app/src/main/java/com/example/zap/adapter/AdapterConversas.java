@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.zap.R;
 import com.example.zap.model.Conversa;
+import com.example.zap.model.Grupo;
 
 import java.util.List;
 
@@ -44,19 +45,38 @@ public class AdapterConversas extends RecyclerView.Adapter<AdapterConversas.View
 
         Conversa conversa = listaConversas.get(position);
 
-        holder.nomeConversa.setText(conversa.getUsuarioExibicao().getNome());
         holder.mensagemConversa.setText(conversa.getUltimaMensagem());
+        if(conversa.getIsGroup().equals("true")){
 
-        if(conversa.getUsuarioExibicao().getFoto() != null){
-            Uri url = Uri.parse(conversa.getUsuarioExibicao().getFoto());
+            Grupo grupo = conversa.getGrupo();
+            holder.nomeConversa.setText(grupo.getNome());
 
-            Glide.with(context)
-                    .load(url)
-                    .into(holder.fotoConversa);
+            if(grupo.getFoto() != null){
+                Uri url = Uri.parse(grupo.getFoto());
+
+                Glide.with(context)
+                        .load(url)
+                        .into(holder.fotoConversa);
+            }
+            else{
+                holder.fotoConversa.setImageResource(R.drawable.padrao);
+            }
         }
-        else{
-            holder.fotoConversa.setImageResource(R.drawable.padrao);
+        else {
+            holder.nomeConversa.setText(conversa.getUsuarioExibicao().getNome());
+
+            if(conversa.getUsuarioExibicao().getFoto() != null){
+                Uri url = Uri.parse(conversa.getUsuarioExibicao().getFoto());
+
+                Glide.with(context)
+                        .load(url)
+                        .into(holder.fotoConversa);
+            }
+            else{
+                holder.fotoConversa.setImageResource(R.drawable.padrao);
+            }
         }
+
 
     }
 

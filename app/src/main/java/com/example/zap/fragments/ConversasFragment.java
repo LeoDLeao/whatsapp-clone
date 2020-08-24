@@ -77,9 +77,24 @@ public class ConversasFragment extends Fragment {
                         new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                Intent intent = new Intent(getActivity(), ChatActivity.class);
-                                intent.putExtra("contato",listaConversas.get(position).getUsuarioExibicao());
-                                startActivity(intent);
+
+                                Conversa conversaSelecionada = listaConversas.get(position);
+
+                                if(conversaSelecionada.getIsGroup().equals("true")){
+                                    Intent intent = new Intent(getActivity(),ChatActivity.class);
+                                    intent.putExtra("grupo",conversaSelecionada.getGrupo());
+                                    startActivity(intent);
+
+
+                                }
+                                else {
+
+                                    Intent intent = new Intent(getActivity(), ChatActivity.class);
+                                    intent.putExtra("contato",conversaSelecionada.getUsuarioExibicao());
+                                    startActivity(intent);
+
+                                }
+
 
                             }
 
