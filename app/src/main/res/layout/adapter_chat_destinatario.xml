@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="nome Exibicao"
+            android:textColor="@android:color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -31,7 +32,8 @@
             android:id="@+id/textMensagem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="This is a text test for your message babe :)" />
+            android:text="This is a text test for your message babe :)"
+            android:textColor="@android:color/black" />
     </LinearLayout>
 
 </RelativeLayout>

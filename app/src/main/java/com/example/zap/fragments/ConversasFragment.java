@@ -78,7 +78,9 @@ public class ConversasFragment extends Fragment {
                             @Override
                             public void onItemClick(View view, int position) {
 
-                                Conversa conversaSelecionada = listaConversas.get(position);
+                                List<Conversa> listaConversasAtualizada = adapterConversas.getConversas();
+
+                                Conversa conversaSelecionada = listaConversasAtualizada.get(position);
 
                                 if(conversaSelecionada.getIsGroup().equals("true")){
                                     Intent intent = new Intent(getActivity(),ChatActivity.class);
@@ -184,11 +186,21 @@ public class ConversasFragment extends Fragment {
 
         for (Conversa conversa : listaConversas){
 
-            String nome = conversa.getUsuarioExibicao().getNome();
-            String msg = conversa.getUltimaMensagem();
+            if(conversa.getUsuarioExibicao() != null){
+                String nome = conversa.getUsuarioExibicao().getNome().toLowerCase();
+                String msg = conversa.getUltimaMensagem().toLowerCase();
 
-            if(nome.contains(texto) || msg.contains(texto)){
-                listaBusca.add(conversa);
+                if(nome.contains(texto) || msg.contains(texto)){
+                    listaBusca.add(conversa);
+                }
+            }
+            else {
+                String nome = conversa.getGrupo().getNome().toLowerCase();
+                String msg = conversa.getUltimaMensagem().toLowerCase();
+
+                if(nome.contains(texto) || msg.contains(texto)){
+                    listaBusca.add(conversa);
+                }
 
             }
 

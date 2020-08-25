@@ -193,9 +193,8 @@ public class ChatActivity extends AppCompatActivity {
 
                     Mensagem mensagem = new Mensagem();
                     mensagem.setIdUsuario(idUsuarioLogadoGrupo);
-                    mensagem.setTextoMensagem(textoMensagem);
-
                     mensagem.setNomeUsuario(usuarioRemetente.getNome());
+                    mensagem.setTextoMensagem(textoMensagem);
 
                     salvarMensagem(idRemetenteGrupo,idDestinatario,mensagem);
 
@@ -318,13 +317,40 @@ public class ChatActivity extends AppCompatActivity {
 
                         String url = task.getResult().toString();
 
-                        Mensagem mensagem = new Mensagem();
-                        mensagem.setIdUsuario(idRemetente);
-                        mensagem.setTextoMensagem("imagem.jpeg");
-                        mensagem.setImagem(url);
 
-                        salvarMensagem(idRemetente,idDestinatario,mensagem);
-                        salvarMensagem(idDestinatario,idRemetente,mensagem);
+                        if(usuarioDestinatario != null){
+
+                            Mensagem mensagem = new Mensagem();
+                            mensagem.setIdUsuario(idRemetente);
+                            mensagem.setTextoMensagem("imagem.jpeg");
+                            mensagem.setImagem(url);
+
+                            salvarMensagem(idRemetente,idDestinatario,mensagem);
+                            salvarMensagem(idDestinatario,idRemetente,mensagem);
+
+                        }else{
+
+                            for(Usuario membro : grupo.getMembros()){
+
+                                String idRemetenteGrupo = Base64Custom.codificarBase64(membro.getEmail());
+                                String idUsuarioLogadoGrupo = UsuarioFirebase.getIdUsuario();
+
+                                Mensagem mensagem = new Mensagem();
+                                mensagem.setIdUsuario(idUsuarioLogadoGrupo);
+                                mensagem.setTextoMensagem("imagem.jpeg");
+                                mensagem.setNomeUsuario(usuarioRemetente.getNome());
+                                mensagem.setImagem(url);
+
+
+
+                                salvarMensagem(idRemetenteGrupo,idDestinatario,mensagem);
+
+                                salvarConversa(idRemetenteGrupo, idDestinatario,usuarioDestinatario,mensagem,true);
+
+                            }
+
+
+                        }
 
                     }));
 

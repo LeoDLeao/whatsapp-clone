@@ -30,6 +30,10 @@ public class AdapterConversas extends RecyclerView.Adapter<AdapterConversas.View
         this.context = c;
     }
 
+    public List<Conversa> getConversas(){
+        return this.listaConversas;
+    }
+
     @NonNull
     @Override
     public ViewHolderConversas onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

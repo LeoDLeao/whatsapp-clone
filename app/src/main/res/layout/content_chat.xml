@@ -50,9 +50,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@android:color/white"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:background="@android:color/white" />
+                android:inputType="textAutoCorrect|text"
+                android:textColor="@android:color/black" />
 
             <ImageView
                 android:id="@+id/imageCameraChat"

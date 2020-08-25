@@ -28,15 +28,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ContatosFragment extends Fragment {
 
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerViewContatos;
     private AdapterContatos adapterContatos;
-    private ArrayList<Usuario> listaContatos = new ArrayList<>();
+    private List<Usuario> listaContatos = new ArrayList<>();
 
     private DatabaseReference usuariosRef;
 
@@ -57,7 +58,7 @@ public class ContatosFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_contatos, container, false);
 
-        recyclerView = view.findViewById(R.id.recyclerViewListaContatos);
+        recyclerViewContatos = view.findViewById(R.id.recyclerViewListaContatos);
         usuariosRef = ConfiguracaoFirebase.getFirebaseDatabase().child("usuarios");
 
 
@@ -65,18 +66,20 @@ public class ContatosFragment extends Fragment {
 
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(adapterContatos);
+        recyclerViewContatos.setLayoutManager(layoutManager);
+        recyclerViewContatos.setHasFixedSize(true);
+        recyclerViewContatos.setAdapter(adapterContatos);
 
-        recyclerView.addOnItemTouchListener(
+        recyclerViewContatos.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(),
-                        recyclerView
+                        recyclerViewContatos
                         , new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
 
-                        Usuario usuarioSelecionado = listaContatos.get(position);
+                        List<Usuario> listaContatosAtualizada = adapterContatos.getContatos();
+
+                        Usuario usuarioSelecionado = listaContatosAtualizada.get(position);
 
                         boolean cabecalho = usuarioSelecionado.getEmail().isEmpty();
 
@@ -161,6 +164,29 @@ public class ContatosFragment extends Fragment {
 
             }
         });
+
+    }
+    public void recarregarContatos(){
+        adapterContatos = new AdapterContatos(listaContatos,getActivity());
+        recyclerViewContatos.setAdapter(adapterContatos);
+        adapterContatos.notifyDataSetChanged();
+    }
+
+    public void pesquisarContatos(String newText){
+
+        List<Usuario> listaContatosBusca = new ArrayList<>();
+
+        for(Usuario contato : listaContatos){
+
+            String nome = contato.getNome().toLowerCase();
+            if(nome.contains(newText)){
+                listaContatosBusca.add(contato);
+            }
+        }
+
+        adapterContatos = new AdapterContatos(listaContatosBusca,getActivity());
+        recyclerViewContatos.setAdapter(adapterContatos);
+        adapterContatos.notifyDataSetChanged();
 
     }
 

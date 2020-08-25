@@ -12,18 +12,19 @@
         android:background="@drawable/bg_balao_chat_remetente"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textMensagem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="This is a test text for your message babe :)" />
-
         <ImageView
             android:id="@+id/imageMensagem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/padrao"
             />
+
+        <TextView
+            android:id="@+id/textMensagem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="This is a test text for your message babe :)"
+            android:textColor="@android:color/black" />
     </LinearLayout>
 
 </RelativeLayout>
