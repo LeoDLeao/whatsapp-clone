@@ -13,10 +13,12 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textMensagem"
-            android:layout_width="wrap_content"
+            android:id="@+id/textNomeExibicao"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="This is a text test for your message babe :)" />
+            android:text="nome Exibicao"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/imageMensagem"
@@ -24,6 +26,12 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/padrao"
             />
+
+        <TextView
+            android:id="@+id/textMensagem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="This is a text test for your message babe :)" />
     </LinearLayout>
 
 </RelativeLayout>

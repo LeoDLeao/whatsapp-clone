@@ -110,6 +110,10 @@ public class CadastroGrupoActivity extends AppCompatActivity {
             grupo.setMembros(listaMembros);
 
             grupo.salvar();
+
+            Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
+            intent.putExtra("grupo",grupo);
+            startActivity(intent);
             finish();
         });
 

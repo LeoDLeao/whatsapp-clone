@@ -206,7 +206,7 @@ public class GrupoActivity extends AppCompatActivity {
 
                 for(DataSnapshot dados : dataSnapshot.getChildren()){
                     Usuario usuario = dados.getValue(Usuario.class);
-                    if(usuario.getEmail() != UsuarioFirebase.getUsuarioAtual().getEmail()) {
+                    if(!usuario.getEmail().equals(UsuarioFirebase.getUsuarioAtual().getEmail())) {
                         listaMembros.add(usuario);
                     }
                 }

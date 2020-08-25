@@ -5,8 +5,10 @@ public class Mensagem {
     private String idUsuario;
     private String textoMensagem;
     private String imagem;
+    private String nomeUsuario;
 
     public Mensagem() {
+        this.setNomeUsuario("");
     }
 
 
@@ -32,5 +34,13 @@ public class Mensagem {
 
     public void setImagem(String imagem) {
         this.imagem = imagem;
+    }
+
+    public String getNomeUsuario() {
+        return nomeUsuario;
+    }
+
+    public void setNomeUsuario(String nomeUsuario) {
+        this.nomeUsuario = nomeUsuario;
     }
 }

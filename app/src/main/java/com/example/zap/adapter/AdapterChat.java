@@ -60,6 +60,12 @@ public class AdapterChat  extends RecyclerView.Adapter<AdapterChat.ViewHolderCha
         String msg = mensagem.getTextoMensagem();
         String imagem = mensagem.getImagem();
 
+        if(getItemViewType(position) == TIPO_DESTINATARIO){
+            String nomeUsuarioExibicao = mensagem.getNomeUsuario();
+            holder.textNomeExibicao.setText(nomeUsuarioExibicao);
+        }
+
+
         if(imagem != null){
             Uri url = Uri.parse(imagem);
             Glide.with(context)
@@ -100,7 +106,9 @@ public class AdapterChat  extends RecyclerView.Adapter<AdapterChat.ViewHolderCha
     public class ViewHolderChat extends RecyclerView.ViewHolder {
 
         TextView textMensagem;
+        TextView textNomeExibicao;
         ImageView imagemMensagem;
+
 
 
         public ViewHolderChat(@NonNull View itemView) {
@@ -108,6 +116,7 @@ public class AdapterChat  extends RecyclerView.Adapter<AdapterChat.ViewHolderCha
             super(itemView);
 
             textMensagem = itemView.findViewById(R.id.textMensagem);
+            textNomeExibicao = itemView.findViewById(R.id.textNomeExibicao);
             imagemMensagem = itemView.findViewById(R.id.imageMensagem);
 
 

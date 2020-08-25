@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.example.zap.R;
 import com.example.zap.model.Conversa;
 import com.example.zap.model.Grupo;
+import com.example.zap.model.Usuario;
 
 import java.util.List;
 
@@ -63,17 +64,20 @@ public class AdapterConversas extends RecyclerView.Adapter<AdapterConversas.View
             }
         }
         else {
-            holder.nomeConversa.setText(conversa.getUsuarioExibicao().getNome());
+            Usuario usuario = conversa.getUsuarioExibicao();
+            if(usuario != null){
+                holder.nomeConversa.setText(usuario.getNome());
 
-            if(conversa.getUsuarioExibicao().getFoto() != null){
-                Uri url = Uri.parse(conversa.getUsuarioExibicao().getFoto());
+                if(conversa.getUsuarioExibicao().getFoto() != null){
+                    Uri url = Uri.parse(conversa.getUsuarioExibicao().getFoto());
 
-                Glide.with(context)
-                        .load(url)
-                        .into(holder.fotoConversa);
-            }
-            else{
-                holder.fotoConversa.setImageResource(R.drawable.padrao);
+                    Glide.with(context)
+                            .load(url)
+                            .into(holder.fotoConversa);
+                }
+                else{
+                    holder.fotoConversa.setImageResource(R.drawable.padrao);
+                }
             }
         }
 
